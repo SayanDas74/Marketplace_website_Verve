@@ -29,4 +29,4 @@ _**Front-end : HTML, CSS**_
 - If buyer likes a product, he needs to contact the seller and organize a meet-up for the transaction
 ## Screenshot
 
-![Verve Homepage](https://ibb.co/JpGsHnN)
+![Verve Homepage](https://github.com/SayanDas74/Marketplace_website_Verve/blob/master/static/images/Screenshot%20(65).png?raw=true)
