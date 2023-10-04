@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.1/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <title>Verve |{% block title %}{% endblock %}</title>
+    <style>
+        .navbar-item.is-size-2 span.ve {
+            color: #d84b2c;
+            font-size: 55px;
+        }
+
+        .navbar-item.is-size-2 span.rv {
+            color: #f4a228;
+            font-size: 55px;
+        }
+
+        .navbar-item.is-size-2 span.e {
+            color: #d84b2c;
+            font-size: 55px;
+        }
+    </style>
+</head>
+
+<body>
+    <!---------------------  Header and navbar  ---------------------->
+    <header class="header">
+        <nav class="navbar is-spaced">
+
+            <!---------------------  navbar verve logo  --------------------->
+            <div class="navbar-brand">
+                <a href="/" class="navbar-item is-size-2"
+                    style="font-family: Georgia;">
+                    <span class="ve">Ve</span>
+                    <span class="rv">rv</span>
+                    <span class="e">e</span>
+                </a>
+            </div>
+
+            <!---------------------  navbar search field  --------------------->
+            <div class="navbar-menu" id="main-navbar">
+                <div class="navbar-start">
+                </div>
+                <div class="navbar-end">
+                    
+                <div class="navbar-item">
+                    <div class="field">
+                        <div class="control has-icons-right">
+                            <form method="get" action="{{ url_for('search_products') }}">
+                                <input type="text" class="input is-medium is-rounded"
+                                    placeholder="Search for anything" name="query">
+                                <span class="icon is-small is-right has-text-dark">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                    {% if "user" in session %}
+                        <!------------------  dropdown user menu   ------------------->
+                        <div class="dropdown is-hoverable is-right navbar-item">
+                            <div class="dropdown-trigger">
+                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                    <span>You</span>
+                                    <span class="icon is-small">
+                                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-item">
+                                        <span class="icon-text">
+                                            <span class="icon">
+                                                <i class="fas fa-user"></i>
+                                            </span>
+                                            <span>{{ session['user']['full_name'] }}</span>
+                                            <p>
+                                                <a class="has-text-dark" href="{{ url_for('my_profile') }}">View your
+                                                    profile</a>
+                                            </p>
+                                        </span>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <span class="icon-text">
+                                            <span class="icon">
+                                                <i class="fas fa-store"></i>
+                                            </span>
+                                            <span>
+                                                <a class="has-text-dark" href="{{ url_for('sell_on_verve') }}">Sell on Verve</a>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="dropdown-item">
+                                        <span class="icon-text">
+                                            <span class="icon">
+                                                <i class="fas fa-sign-out-alt"></i>
+                                            </span>
+                                            <span>
+                                                <a class="has-text-dark" href="{{ url_for('logout') }}">Sign out</a>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a id="sign_in" class="has-text-dark has-text-weight-semibold navbar-item">Sign in</a>
+                    {% endif %}
+
+        <!---------------------  categories menu   --------------------->
+        <!-- <nav class="level pb-2">
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Jewelry & Accesories</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Clothing & Shoes</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Home & Living</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Wedding & Party</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Toys & Entertainment</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Art & Collectibles</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Craft Supplies & Tools</a>
+            </p>
+            <p class="level-item has-text-centered">
+                <a class="link has-text-dark">Vintage</a>
+            </p>
+        </nav> -->
+    </header>
+
+    <!---------------------  modal sign in form   --------------------->
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-content has-background-white py-5 px-5">
+            <h2 class="subtitle has-text-weight-semibold">Sign in</h2>
+
+            <form method="post" action="{{ url_for('login') }}">
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control">
+                        <input class="input" type="text" name="username" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Password</label>
+                    <div class="control">
+                        <input class="input" type="password" name="password" autocomplete="new-password" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <input type="submit" class="button is-medium is-rounded is-fullwidth is-dark" value="Sign in">
+                    </div>
+                </div>
+            </form>
+            <hr>
+            <p>
+                <a href="{{ url_for('sign_up') }}">Don't have an account yet?</a>
+            </p>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
+
+        <!---------  extends to other html pages from here  ------------>
+        {% block content %}{% endblock %}
+
+    <!-----------------  scripts for modal sign in   ----------------->
+    <script>
+        const signInButton = document.querySelector('#sign_in');
+        const modalBg = document.querySelector('.modal-background');
+        const modal = document.querySelector('.modal');
+        const modalButton = document.querySelector('.modal-close');
+
+        signInButton.addEventListener('click', () => {
+            modal.classList.add('is-active');
+        });
+        modalBg.addEventListener('click', () => {
+            modal.classList.remove('is-active');
+        });
+        modalButton.addEventListener('click', () => {
+            modal.classList.remove('is-active');
+        });
+    </script>
+</body>
+
+</html>

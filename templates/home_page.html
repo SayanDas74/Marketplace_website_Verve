@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %} Home {% endblock %}
+
+{% block content %}
+
+<!----------------  flashed messages and notifications  ---------------->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="notification is-success">{{msg}}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<style>
+    .image-caption {
+        height: 4.5em; /* Set a fixed height for two lines */
+        display: block;
+        overflow: hidden;
+        white-space: normal;
+    }
+    .hero.is-custom {
+    background-image: url('https://images.unsplash.com/photo-1675782357245-9e6187773ea7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+    animation: slidein 100s infinite alternate;
+    border-radius: 3px;
+    height: 170px; 
+    border: 2px solid #000;
+    }
+    .hero.is-custom h1.title {
+    color: rgb(0, 0, 0); 
+    font-size: 25px;
+    font-weight: normal;
+    background-color: rgb(253, 253, 253); 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    padding: 10px; 
+    max-width: 55%;
+    margin: 0 auto;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    border: 2px solid #000;
+}
+
+    .footer {
+        padding-top : 10px;
+        padding : 20px;
+        }
+
+@keyframes slidein {
+    from {
+        background-position: top;
+        background-size: 600px;
+    }
+    to {
+        background-position: -100px 0px;
+        background-size: 550px;
+    }
+}
+</style>
+
+{% if "user" in session %}
+<!----------------  personal greeting  ---------------->
+    <hr>
+
+    <section class="section py-1">
+        <h1 class="is-size-5" style="font-family: Georgia;">Welcome back, {{ session['user']['username'] }}!</h1>
+    </section>
+{% endif %}
+<!----------------  hero image and categories  ---------------->
+<br>
+<section class="hero is-custom" style="height: 170px;"> <!-- Added margin to extend the hero banner -->
+    <div class="hero-body">
+        <h1 class="title has-text-centered has-text-weight-light" style="font-family: Calibri;">
+            Buy/Sell items from artisans and individual manufacturers in your locality. <br> Walk down the street and make that magic happen
+        </h1>
+    </div>
+</section>
+
+
+
+<!----------------  featured products  ---------------->
+<section class="section">
+    {% if products %}
+        <h2 class="is-size-3 has-text-centered has-text-weight-semibold">Discover items</h2>
+
+        <br>
+        <br>
+        <div class="columns is-multiline">
+            {% for product in products %}
+                <div class="column is-3 product-list-item">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-4by3">
+                                <a href="{{ url_for('product_page', product_id=product.prod_id) }}">
+                                    <img src="{{ product.thumbnail }}" alt="product thumbnail">
+                                </a>
+                            </figure>
+                        </div>
+                        <!-- Add product name and price below the thumbnail -->
+                        <br>
+                    <div class="card-content">
+                        <p class="title is-6">{{ product.title }}</p>
+                        <p class="has-text-weight-semibold">₹ {{ product.price }}</p>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <p class="has-text-centered">There are no products in your locality yet...</p>
+    {% endif %}
+</section>
+
+<footer class="footer has-background-dark has-text-light has-text-centered">
+    <div class="content">
+        <p>
+            Created by Sayan Das. This website is just for testing purposes and requires heavy modifications for effective use.
+        </p>
+    </div>
+</footer>
+  
+{% endblock %}

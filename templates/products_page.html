@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %} {{ query }} {% endblock %}
+
+{% block content %}
+
+<!----------------  flashed messages and notifications  ---------------->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="notification is-success is-toast">{{msg}}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<hr>
+
+<section class="section">
+    {% if products %}
+    <!----------------  sidebar filter options  ---------------->
+        <div class="columns">
+            <div class="column is-3">
+                <nav class="panel is-white">
+                    <p class="panel-heading">
+                        {{ query }}
+                    </p>
+                    <a class="panel-block is-active" href="{{ url_for('all_products') }}">
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="fas fa-arrow-left"></i>
+                            </span>
+                            <span>All items</span>
+                        </span>
+                    </a>
+
+                    <!----------------  price filters  ---------------->
+                    <div class="panel-block">
+                        <div class="block">
+                            <p class="has-text-weight-semibold">Price</p>
+                            <label class="radio">
+                                <input type="radio" name="price">
+                                Under ₹ 100
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="price">
+                                ₹ 100 to ₹ 500
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="price">
+                                ₹ 500 to ₹ 1000
+                            </label>
+                            <br>
+                            <label class="radio">
+                                <input type="radio" name="price">
+                                Over ₹ 1000
+                            </label>
+                        </div>
+                    </div>
+
+                    <!----------------  color filters  ---------------->
+                    <div class="panel-block">
+                        <div class="block">
+                            <p class="has-text-weight-semibold">Color</p>
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Beige
+                            </label>
+                            <br>
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Black
+                            </label>
+                            <br>
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Blue
+                            </label>
+                            <br>
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Brown
+                            </label>
+                            <br>
+                            <label class="checkbox">
+                                <input type="checkbox">
+                                Bronze
+                            </label>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+
+            <!---------------------  products  ---------------------->
+            <div class="column">
+                <div class="columns is-multiline">
+                    {% for product in products %}
+                        <div class="column is-3 product-list-item">
+                            <div class="card">
+                                <div class="card-image">
+                                    <figure class="image is-1by1">
+                                        <a href="/product_page/{{ product.prod_id }}">
+                                            <img src="{{ product.thumbnail }}" alt="product thumbnail">
+                                        </a>
+                                    </figure>
+                                </div>
+                            </div>
+                            <a class="has-text-dark" href="{{ url_for('product_page', product_id=product.prod_id) }}">{{ product.title }}</a>
+
+                            <br>
+
+                            <a class="has-text-dark has-text-weight-light is-size-7"
+                                href="{{ url_for('user_page', username=product.vendor.username) }}">{{ product.vendor.username }}</a>
+                            <p class="has-text-weight-bold">₹ {{ product.price }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="container">
+            <div class="block">
+                <h1 class="title is-size-1 has-text-weight-light" style="font-family: Georgia;">We couldn't find any results for {{ query }} in your locality</h1>
+            </div>
+            <div class="block mb-6">
+                <h2 class="subtitle">Try searching for something else instead?</h2>
+            </div>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

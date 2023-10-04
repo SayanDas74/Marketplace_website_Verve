@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %} {{ verve_user.username }} Profile {% endblock %}
+
+{% block content %}
+
+<!----------------  flashed messages and notifications  ---------------->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="notification is-danger">{{msg}}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<style>
+.no-hover {
+    cursor: default !important;
+    pointer-events: none !important;
+}
+</style>
+
+<section class="section">
+    <div class="columns">
+        <div class="column is-two-fifths">
+
+            <!---------------------  user info  --------------------->
+            <div class="media">
+                <div class="media-content">
+                    <div class="content">
+                        <h1 class="has-text-weight-light title mb-5" style="font-family: Georgia;">{{
+                            verve_user.username }}</h1>
+                        <h2 class="subtitle mb-3">{{ verve_user.bio }}</h2>
+                        <p class="has-text-weight-light">{{ verve_user.address }}</p>
+                        <p class="has-text-weight-light">{{ verve_user.seller_description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!----------------  filters sidebar  ---------------->
+<section class="section">
+    <div class="columns">
+        <div class="column is-3">
+            <nav class="panel is-white">
+                <div class="panel-block">
+                    <div class="button is-dark is-fullwidth no-hover">
+                        <span class="icon-text">
+                            <span class="has-text-weight-semibold">{{ verve_user.contact_info }}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="panel-block">
+                    <div class="button is-outlined is-fullwidth no-hover">
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="fas fa-comment-dots"></i>
+                            </span>
+                            <span class="has-text-weight-semibold">Contact owner on the above info</span>
+                        </span>
+                    </div>
+                </div>
+
+            </nav>
+        </div>
+
+        <!---------------------  user products  --------------------->
+        <div class="column">
+            {% if products %}
+                <div class="columns is-multiline">
+                    {% for product in products %}
+                        <div class="column is-3 product-list-item">
+                            <div class="card">
+                                <div class="card-image">
+                                    <figure class="image is-1by1">
+                                        <a href="{{ url_for('product_page', product_id=product.prod_id) }}">
+                                            <img src="{{ product.thumbnail }}" alt="product thumbnail">
+                                        </a>
+                                    </figure>
+                                </div>
+                            </div>
+                            <a class="has-text-dark" href="{{ url_for('product_page', product_id=product.prod_id) }}">{{ product.title }}</a>
+                            <p class="has-text-weight-bold">₹ {{ product.price }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>{{ verve_user.username }} doesn't have any products yet...</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

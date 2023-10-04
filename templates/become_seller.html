@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %} Become a Seller {% endblock %}
+
+{% block content %}
+
+<!----------------  flashed messages and notifications  ---------------->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="notification is-danger">{{msg}}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<hr>
+
+<!----------------------  add seller info - form  ----------------------->
+<section class="section">
+    <div class="container">
+        <h1 class="title">Become a Seller</h1>
+
+        <div class="box">
+            <form action="{{ url_for('become_seller') }}" method="post">
+                <!-----------------  brief description  ----------------->
+                <div class="field pb-2">
+                    <label class="label">Brief description of you or your business</label>
+                    <div class="control">
+                        <textarea id="description" class="textarea" name="description" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="field">
+                    <label class="label">Contact Information</label>
+                    <div class="control">
+                        <input id="contact" class="input" type="text" name="contact" required>
+                    </div>
+                </div>
+
+                <!---------------------  submit button  --------------------->
+                <div class="field">
+                    <div class="control">
+                        <input type="submit" class="button is-dark is-fullwidth is-medium" value="Become a Seller">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

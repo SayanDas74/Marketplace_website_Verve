@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %} My Profile {% endblock %}
+
+{% block content %}
+
+<!----------------  flashed messages and notifications  ---------------->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="notification is-danger">{{msg}}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<hr>
+
+<!-------------------  user info section  ------------------->
+<section class="section">
+    <div class="columns">
+        <div class="column is-two-fifths">
+            <div class="media">
+                <!-- <figure class="image is-96x96 media-left">
+                    <img width="128" height="128" class="is-rounded" src="{{ user.avatar_url }}" alt="user avatar">
+                </figure> -->
+                <div class="media-content">
+                    <div class="content">
+                        <h1 class="has-text-weight-light" style="font-family: Georgia;">{{ user.full_name }}</h1>
+                        <span class="icon-text">
+                            <span class="icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </span>
+                            <span>{{ user.address }}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-------------------  user products section  ------------------->
+<section class="section">
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h2 class="is-size-4 mb-4">My products</h2>
+            </div>
+        </div>
+        <div class="level-right">
+            {% if products|length > 0 %}
+                <div class="level-item">
+                    <a href="{{ url_for('add_product') }}" class="button is-warning is-rounded">Add product</a>
+                </div>
+            {% else %}
+                <div class="level-item">
+                    <a href="{{ url_for('become_seller') }}" class="button is-warning is-rounded">Become a Seller</a>
+                </div>
+            {% endif %}
+            <div class="level-item">
+                <a href="{{ url_for('my_products') }}" class="button is-dark is-rounded">View products</a>
+            </div>
+        </div>
+    </div>
+
+    {% if products %}
+        <div class="columns is-multiline">
+            {% for product in products %}
+                <div class="column is-2 product-list-item">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-1by1">
+                                <a href="{{ url_for('product_page', product_id=product.prod_id) }}">
+                                    <img src="{{ product.thumbnail }}" alt="product thumbnail">
+                                </a>
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <a href="{{ url_for('product_page', product_id=product.prod_id) }}">{{ product.title }}</a>
+                            <p>In stock: {{ product.qty }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You don't have any products yet...</p>
+    {% endif %}
+</section>
+{% endblock %}

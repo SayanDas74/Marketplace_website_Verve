@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %} {{ product.title }} {% endblock %}
+
+{% block content %}
+
+<!----------------  flashed messages and notifications  ---------------->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="notification is-success is-toast">{{msg}}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<style>
+    .thumbnailImage {
+        cursor: pointer;
+    }
+</style>
+
+<hr>
+
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <!---------------------  Product images  -------------------->
+            <div class="column is-two-thirds">
+                {% if product_images %}
+                    <figure class="image is-1by1">
+                        <img id="mainImage" src="{{ product_images[0] }}" alt="product thumbnail">
+                    </figure>
+                    <br>
+                    <div class="columns">
+                        {% for image_url in product_images %}
+                            <div class="column">
+                                <figure class="image is-128x128">
+                                    <img class="thumbnailImage" src="{{ image_url }}" alt="product thumbnail">
+                                </figure>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <figure class="image is-1by1">
+                        <img src="http://cdn.shopify.com/s/files/1/0169/2660/5412/collections/placeholder-images-collection-1_large_807560ab-9024-46ea-ab0a-bb49df2b3bb8_1200x1200.png?v=1551259616"
+                            alt="product image placeholder">
+                    </figure>
+                {% endif %}
+            </div>            
+
+            <!---------------------  product info   --------------------->
+            <div class="column ml-6">
+                <div class="block">
+                    <h1 class="title has-text-weight-light my-3">{{ product.title }}</h1>
+                    <h2 class="title has-text-weight-bold my-3">₹ {{ product.price }}</h2>
+
+                    <br>
+                    <p>In stock: {{ product.qty }}</p>
+                    <br>
+
+                    <!------------------  product description   ------------------>
+                    <h2 class="has-text-weight-semibold">Description</h2>
+
+                    <br>
+
+                    <p>{{ product.description }}</p>
+                </div>
+
+                <br>
+
+                <br>
+
+                <!------------------  seller info  ------------------>
+                <div class="block">
+                    <h2 class="has-text-weight-semibold">Meet your seller</h2>
+
+                    <br>
+
+                    <div class="media">
+                        <div class="media-content">
+                            <div class="content">
+                                <a class="has-text-weight-light is-size-3" style="font-family: Georgia;" href="{{ url_for('user_page', username=product.vendor.username) }}">
+                                    {{ product.vendor.username }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <a class="button has-text-weight-bold is-fullwidth is-outlined is-rounded" href="{{ url_for('user_page', username=product.vendor.username) }}">Reach out to {{
+                        product.vendor.username }} to buy this</a>
+                        <br>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all thumbnail images
+        const thumbnailImages = document.querySelectorAll('.thumbnailImage');
+
+        thumbnailImages.forEach(function(image) {
+            image.addEventListener('click', function() {
+                // Get the source of the clicked thumbnail
+                const newImageSrc = image.src;
+                
+                // Set the main image source to the clicked thumbnail
+                document.getElementById('mainImage').src = newImageSrc;
+            });
+        });
+    });
+</script>
+
+{% endblock %}
